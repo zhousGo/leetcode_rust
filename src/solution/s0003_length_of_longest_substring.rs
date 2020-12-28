@@ -35,16 +35,27 @@ s由英文字母、数字、符号和空格组成
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
 
-
-struct Solution{}
+struct Solution {}
 
 impl Solution {
     pub fn length_of_longest_substring(s: String) -> i32 {
-
+        use std::cmp::max;
+        let mut last: [i32; 128] = [-1; 128];
+        let mut left = -1;
+        let mut ans = 0;
+        for (i, v) in s.chars().enumerate() {
+            left = max(left, last[v as usize]);
+            last[v as usize] = i as i32;
+            ans = max(ans, (i as i32) - left);
+        }
+        return ans;
     }
 }
 
 #[cfg(test)]
-mod test{
-
+mod test {
+    #[test]
+    pub fn test() {
+        
+    }
 }
