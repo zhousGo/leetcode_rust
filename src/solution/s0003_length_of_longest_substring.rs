@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 /*
     给定一个字符串，请你找出其中不含有重复字符的最长子串的长度。
 
@@ -50,12 +52,43 @@ impl Solution {
         }
         return ans;
     }
+
+    pub fn length_of_longest_substring_01(s: String) -> i32 {
+        let mut dque = VecDeque::new();
+        let mut ans = vec![];
+        for c in s.chars() {
+            for i in 0..dque.len() {
+                if dque[i] == c {
+                    ans.push(dque.len());
+                    for _ in 0..i + 1 {
+                        dque.pop_front();
+                    }
+                    break;
+                }
+            }
+            dque.push_back(c);
+        }
+        ans.push(dque.len());
+        let mut max = 0;
+        for i in ans {
+            if i > max {
+                max = i;
+            }
+        }
+        max as i32
+    }
 }
 
 #[cfg(test)]
 mod test {
+    use super::Solution;
+
     #[test]
     pub fn test() {
-        
+        assert_eq!(2, Solution::length_of_longest_substring("addc".to_string()));
+        assert_eq!(
+            2,
+            Solution::length_of_longest_substring_01("addc".to_string())
+        );
     }
 }
