@@ -16,8 +16,58 @@
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处 。
 */
 
+#[derive(PartialEq, Eq, Clone, Debug)]
+pub struct ListNode {
+    pub val: i32,
+    pub next: Option<Box<ListNode>>
+}
+
+impl ListNode {
+    #[inline]
+    pub fn new(val: i32) -> Self {
+        ListNode{
+            val,
+            next: None
+        }
+    }
+}
+
 struct Solution {}
 
 impl Solution {
-    pub fn add_two_numbers() {}
+    pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut result = None;
+        let mut tail = &mut result;
+        let mut t = (l1, l2, 0, 0);
+        loop {
+            t = match t {
+                (None, None, _, 0) => break,
+                (None, None, _, carry) => (None, None, carry, 0),
+                (Some(list), None, _, carry) | (None, Some(list), _, carry) => {
+                    if list.val + carry >= 10 {
+                        (list.next, None, list.val + carry - 10, 1)
+                    } else {
+                        (list.next, None, list.val + carry, 0)
+                    }
+                }
+                (Some(list1), Some(list2), _, carry) => {
+                    let val = list1.val + list2.val + carry;
+                    if val >= 10 {
+                        (list1.next, list2.next, val - 10, 1)
+                    } else {
+                        (list1.next, list2.next, val, 0)
+                    }
+                }
+            };
+            *tail = Some(Box::new(ListNode::new(t.2)));
+            tail = &mut tail.as_mut().unwrap().next;
+        }
+        result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {}
 }
