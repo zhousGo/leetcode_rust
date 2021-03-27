@@ -61,8 +61,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let num1 = vec![1,2,5,6,4,1];
+        let num1 = vec![1,2];
         let num2 = vec![3,4];
-        println!("{}", Solution::find_median_sorted_arrays(num1, num2));
+        assert_eq!(2.5, Solution::find_median_sorted_arrays(num1, num2));
     }
 }
